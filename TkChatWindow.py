@@ -112,12 +112,12 @@ class TkChatWindow(tk.Frame, Processor):
 
         self.grid(column=0, row=0, sticky="nsew")
         self.messages.grid(row=0, column=0, sticky="nsew")
-        self.utilisateurs.grid(row=0, column=1)
+        self.utilisateurs.grid(row=0, column=1, sticky="nsew")
         self.input.grid(row=1, column=0, sticky="we")
         self.send.grid(row=1, column=1, sticky="ew")
 
-        self.columnconfigure(0, weight=1)
-        root.columnconfigure(0, weight=1)
+        self.columnconfigure(0, weight=0)
+        root.columnconfigure(0, weight=0)
         self.rowconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
 
