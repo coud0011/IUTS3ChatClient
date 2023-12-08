@@ -8,7 +8,7 @@ import random
 def connected(chatWindow, arguments):
     Adj = ["soudainement", "brusquement", "discrètement", "lentement", "finalement", "", "enfin", "encore"]
     chatWindow.messages['state'] = 'normal'
-    chatWindow.messages.insert('end', f"{arguments[2]} apparait {random.choices(Adj)[0]} sur le serveur !\n")
+    chatWindow.messages.insert('end', f"{arguments[2]} apparait {random.choices(Adj)[0]} sur le serveur !\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
@@ -18,35 +18,35 @@ def listing(chatWindow, arguments):
         for elt in arguments:
             if elt != "#list" and elt != ' ':
                 chatWindow.messages.insert('end', elt + ' ')
-        chatWindow.messages.insert('end', "sont connectés sur le serveur actuellement !\n")
+        chatWindow.messages.insert('end', "sont connectés sur le serveur actuellement !\n\n")
     else:
-        chatWindow.messages.insert('end', "Personne n'est connecté sur le serveur actuellement.\n")
+        chatWindow.messages.insert('end', "Personne n'est connecté sur le serveur actuellement.\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
 def alias(chatWindow, arguments):
     chatWindow.messages['state'] = 'normal'
     chatWindow.messages.insert('end',
-                               f"Bienvenue {arguments[2]} ! Vous êtes bien connecté(e) sur le serveur ChatText.\n")
+                               f"Bienvenue {arguments[2]} ! Vous êtes bien connecté(e) sur le serveur ChatText.\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
 def private(chatWindow, arguments):
     chatWindow.messages['state'] = 'normal'
     chatWindow.messages.insert('end', f"{arguments[2]} viens de vous envoyer le message privé :\n{arguments[4]}\n"
-                                      f"Pour lui répondre tapez : /private {arguments[2]} message.\n")
+                                      f"Pour lui répondre tapez : /private {arguments[2]} message.\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
 def renamed(chatWindow, arguments):
     chatWindow.messages['state'] = 'normal'
-    chatWindow.messages.insert('end', f"{arguments[2]} vient de se renommer en {arguments[4]}.\n")
+    chatWindow.messages.insert('end', f"{arguments[2]} vient de se renommer en {arguments[3]}.\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
 def disconnected(chatWindow, arguments):
     chatWindow.messages['state'] = 'normal'
-    chatWindow.messages.insert('end', arguments[2] + " est parti ! (Enfin...)\n")
+    chatWindow.messages.insert('end', arguments[2] + " est parti ! (Enfin...)\n\n")
     chatWindow.messages['state'] = 'disabled'
 
 
@@ -108,7 +108,7 @@ class TkChatWindow(tk.Frame, Processor):
         self.messages['state'] = 'disabled'
         self.input = tk.Entry(self)
         self.input.bind('<Return>', self.send_data)
-        self.send = tk.Button(self, text='send', command=self.send_data)
+        self.send = tk.Button(self, text='Send', command=self.send_data)
 
         self.grid(column=0, row=0, sticky="nsew")
         self.messages.grid(row=0, column=0, sticky="nsew")
@@ -121,7 +121,7 @@ class TkChatWindow(tk.Frame, Processor):
         self.rowconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
 
-        self.chat = ch.Chat('linux', 8888, self)
+        self.chat = ch.Chat('linux', 3102, self)  # 8888
 
     def close(self):
         self.CLOSE = True
@@ -142,9 +142,8 @@ class TkChatWindow(tk.Frame, Processor):
         chatWindow.messages['state'] = 'disabled'
 
     def send_data(self, event=None):
-        if event is None:
-            event = self.input.get()
-        self.chat.transport.write((f"{event}" + '\n').encode())
+        event = self.input.get()
+        self.chat.transport.write(f"{event}\n".encode())
 
     def connection_lost(self):
         self.close()

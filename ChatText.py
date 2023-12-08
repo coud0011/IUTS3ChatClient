@@ -78,7 +78,7 @@ class Processor:
                 self.server_commands[message_decode[0]](message_decode)
         else:
             message = message.partition(' ')
-            message = message[0]+"# "+message[2]
+            message = message[0] + "# " + message[2]
             print(message)
 
 
@@ -141,7 +141,7 @@ class ChatText(Processor):
 
 
 async def main():
-    chat = ChatText('linux', 8888)
+    chat = ChatText('linux', 3101)  # 8888
     await chat.create_connection()
     await chat.listen()
 
