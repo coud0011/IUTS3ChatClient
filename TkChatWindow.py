@@ -12,6 +12,7 @@ def essai(chatWindow, arguments):
 def majUsers(chatWindow):
     chatWindow.utilisateurs['state'] = 'normal'
     chatWindow.utilisateurs.delete('1.0', 'end')
+    print(chatWindow.users)
     for elt in chatWindow.users:
         chatWindow.utilisateurs.insert("end", elt + "\n")
     chatWindow.utilisateurs['state'] = 'disabled'
@@ -43,8 +44,8 @@ def listing(chatWindow, arguments):
 
 def alias(chatWindow, arguments):
     chatWindow.messages['state'] = 'normal'
-    chatWindow.messages.insert('end',
-                               f"Bienvenue {arguments[2]} ! Vous êtes bien connecté(e) sur le serveur ChatText.\n\n")
+    chatWindow.messages.insert('end', f"Bienvenue {arguments[2]} ! Vous êtes bien connecté(e) sur le serveur "
+                                      f"ChatText.\n\n")
     chatWindow.messages['state'] = 'disabled'
     chatWindow.users.append(arguments[2])
     majUsers(chatWindow)
@@ -81,6 +82,7 @@ class privateWindow:
         self.messages.insert('end', f"{arguments[2]} : {arguments[4]}\n")
         self.messages['state'] = 'disabled'
 
+
 def private(chatWindow, arguments):
     res = False
     for elt in chatWindow.privates:
@@ -92,7 +94,7 @@ def private(chatWindow, arguments):
 
 
 def send_private_data(chatWindow, inputing, user):
-    print(f"/private {user} {inputing}\n")
+    #print(f"/private {user} {inputing}\n")
     chatWindow.chat.transport.write(f"/private {user} {inputing}\n".encode())
 
 
@@ -151,7 +153,7 @@ class Processor:
             self.chatWindow.messages['state'] = 'normal'
             self.chatWindow.messages.insert('end', message + '\n')
             self.chatWindow.messages['state'] = 'disabled'
-            print(message)
+            #print(message)
 
 
 class TkChatWindow(tk.Frame, Processor):
@@ -188,7 +190,7 @@ class TkChatWindow(tk.Frame, Processor):
         root.columnconfigure(0, weight=0)
         self.rowconfigure(0, weight=1)
         root.rowconfigure(0, weight=1)
-        self.chat = ch.Chat('127.0.0.1', 8888, self)  # 8888
+        self.chat = ch.Chat('127.0.0.1', 8888, self)  # self.chat = ch.Chat('linux', 3101, self)  #
 
     def private(self, arg):
         private(self, ['', '', 'hello', arg])
@@ -226,8 +228,7 @@ async def main():
     await cw.chat.create_connection(on_con_lost)
     while not cw.CLOSE:
         root.update()
-        await asyncio.sleep(0)
-
+        await asyncio.sleep(0.01)
 
 if __name__ == '__main__':
     asyncio.run(main())
